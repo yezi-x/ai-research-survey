@@ -2,201 +2,2395 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- ===== 페이지 제목 ===== -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>AI 챗봇 사용 회상 연구</title>
 
-  <!-- ===== 카카오톡 / SNS 미리보기 메타태그 (Open Graph) ===== -->
+  <!-- 카카오톡 / SNS 미리보기 -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="AI 챗봇 사용 회상 연구" />
   <meta property="og:description" content="최근 AI와 나눈 대화를 떠올려보는 짧은 설문입니다. 완료 시 투썸 커피 기프티콘을 드립니다." />
-  <!-- 썸네일 이미지: thumbnail.png 파일을 이 index.html과 같은 폴더에 함께 업로드하세요 -->
   <meta property="og:image" content="thumbnail.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-
-  <!-- 트위터/기타 호환 -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="AI 챗봇 사용 회상 연구" />
-  <meta name="twitter:description" content="최근 AI와 나눈 대화를 떠올려보는 짧은 설문입니다. 완료 시 투썸 커피 기프티콘을 드립니다." />
-  <meta name="twitter:image" content="thumbnail.png" />
 
-  <!-- Pretendard 폰트 (설문 앱과 동일) -->
+  <!-- Pretendard 폰트 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 
+  <!-- Tailwind (Play CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- React + ReactDOM + Babel -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
   <style>
-    :root {
-      --stone-50: #fafaf9;
-      --stone-100: #f5f5f4;
-      --stone-200: #e7e5e4;
-      --stone-500: #78716c;
-      --stone-600: #57534e;
-      --stone-800: #292524;
-      --amber-50: #fffbeb;
-      --amber-100: #fef3c7;
-      --amber-700: #b45309;
-      --indigo-600: #4f46e5;
-      --indigo-700: #4338ca;
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html, body {
-      height: 100%;
-      font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
-      background: var(--stone-50);
-      color: var(--stone-800);
-      -webkit-font-smoothing: antialiased;
-    }
-
-    body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      background:
-        radial-gradient(circle at 20% 20%, rgba(180, 83, 9, 0.04) 0%, transparent 40%),
-        radial-gradient(circle at 80% 80%, rgba(79, 70, 229, 0.04) 0%, transparent 40%),
-        var(--stone-50);
-    }
-
-    .card {
-      width: 100%;
-      max-width: 480px;
-      background: #fff;
-      border: 1px solid var(--stone-200);
-      border-radius: 28px;
-      padding: 40px 32px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.04);
-      animation: rise 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .badge {
-      display: inline-block;
-      font-size: 11px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--amber-700);
-      font-weight: 600;
-      background: var(--amber-50);
-      border: 1px solid var(--amber-100);
-      border-radius: 999px;
-      padding: 6px 14px;
-      margin-bottom: 22px;
-    }
-
-    h1 {
-      font-size: 26px;
-      font-weight: 700;
-      line-height: 1.4;
-      letter-spacing: -0.01em;
-      margin-bottom: 16px;
-    }
-
-    .intro {
-      font-size: 15px;
-      line-height: 1.8;
-      color: var(--stone-600);
-      margin-bottom: 28px;
-    }
-
-    .info {
-      background: var(--stone-50);
-      border: 1px solid var(--stone-100);
-      border-radius: 18px;
-      padding: 18px 20px;
-      margin-bottom: 28px;
-    }
-
-    .info-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 14px;
-      color: var(--stone-600);
-      padding: 7px 0;
-    }
-    .info-row .icon {
-      font-size: 18px;
-      width: 24px;
-      text-align: center;
-      flex-shrink: 0;
-    }
-    .info-row strong {
-      color: var(--stone-800);
-      font-weight: 600;
-    }
-
-    .start-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      background: var(--indigo-600);
-      color: #fff;
-      font-size: 16px;
-      font-weight: 600;
-      font-family: inherit;
-      border: none;
-      border-radius: 16px;
-      padding: 17px;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      text-decoration: none;
-    }
-    .start-btn:hover { background: var(--indigo-700); }
-    .start-btn:active { transform: scale(0.985); }
-    .start-btn .arrow { transition: transform 0.2s; }
-    .start-btn:hover .arrow { transform: translateX(3px); }
-
-    .footnote {
-      text-align: center;
-      font-size: 12px;
-      color: var(--stone-500);
-      margin-top: 18px;
-      line-height: 1.6;
-    }
+    body { font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; }
+    input[type="text"], input[type="tel"], input[type="email"], input[type="number"], textarea { font-size: 16px !important; }
   </style>
 </head>
 <body>
-  <div class="card">
-    <span class="badge">연세대학교 정보대학원 연구</span>
-    <h1>AI 챗봇 사용 회상 연구</h1>
-    <p class="intro">
-      최근 ChatGPT, Claude, Gemini 같은 AI와 무언가를 결정하기 위해 나눈
-      대화를 떠올려보는 짧은 설문입니다. 끝까지 참여해주시면 큰 도움이 됩니다.
-    </p>
+  <div id="root"></div>
 
-    <div class="info">
-      <div class="info-row">
-        <span class="icon">⏱️</span>
-        <span>약 <strong>12~15분</strong> 소요</span>
+  <script type="text/babel" data-presets="react">
+const { useState, useEffect, useRef } = React;
+
+// ===== Supabase 설정 =====
+const SUPABASE_URL = "https://jswhskumpzdaeityggzx.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impzd2hza3VtcHpkYWVpdHlnZ3p4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzMzY2MzQsImV4cCI6MjA5NDkxMjYzNH0.U857VXw81jiiB9Snygl8-nf-wsKqwGHlhSSXSuOTEuw";
+
+async function saveResponseToSupabase(participantId, submission) {
+  const res = await fetch(SUPABASE_URL + "/rest/v1/responses", {
+    method: "POST",
+    headers: {
+      "apikey": SUPABASE_ANON_KEY,
+      "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+      "Content-Type": "application/json",
+      "Prefer": "return=minimal",
+    },
+    body: JSON.stringify({
+      participant_id: participantId,
+      submitted_at: submission.submittedAt,
+      data: submission,
+    }),
+  });
+  if (!res.ok) {
+    const txt = await res.text();
+    throw new Error("Supabase insert failed: " + res.status + " " + txt);
+  }
+  return true;
+}
+
+async function loadResponsesFromSupabase() {
+  const res = await fetch(
+    SUPABASE_URL + "/rest/v1/responses?select=data&order=submitted_at.desc",
+    {
+      headers: {
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+      },
+    }
+  );
+  if (!res.ok) {
+    const txt = await res.text();
+    throw new Error("Supabase load failed: " + res.status + " " + txt);
+  }
+  const rows = await res.json();
+  // Each row has a "data" jsonb column containing the full submission object
+  return rows.map((row) => row.data);
+}
+
+// ===== lucide 아이콘 (인라인 SVG) =====
+const iconBase = (paths) => (props) => {
+  const { className = "", ...rest } = props || {};
+  return React.createElement(
+    "svg",
+    {
+      className,
+      xmlns: "http://www.w3.org/2000/svg",
+      width: 24, height: 24, viewBox: "0 0 24 24",
+      fill: "none", stroke: "currentColor",
+      strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round",
+      ...rest,
+    },
+    paths.map((d, i) => React.createElement("path", { key: i, d }))
+  );
+};
+const ArrowRight = iconBase(["M5 12h14", "M12 5l7 7-7 7"]);
+const ArrowLeft = iconBase(["M19 12H5", "M12 19l-7-7 7-7"]);
+const Sparkles = iconBase(["M12 3l1.9 5.8a2 2 0 0 0 1.3 1.3L21 12l-5.8 1.9a2 2 0 0 0-1.3 1.3L12 21l-1.9-5.8a2 2 0 0 0-1.3-1.3L3 12l5.8-1.9a2 2 0 0 0 1.3-1.3z"]);
+const Share2 = (props) => {
+  const { className = "", ...rest } = props || {};
+  return React.createElement("svg", { className, xmlns: "http://www.w3.org/2000/svg", width:24, height:24, viewBox:"0 0 24 24", fill:"none", stroke:"currentColor", strokeWidth:2, strokeLinecap:"round", strokeLinejoin:"round", ...rest },
+    React.createElement("circle", { cx:18, cy:5, r:3 }),
+    React.createElement("circle", { cx:6, cy:12, r:3 }),
+    React.createElement("circle", { cx:18, cy:19, r:3 }),
+    React.createElement("line", { x1:8.59, y1:13.51, x2:15.42, y2:17.49 }),
+    React.createElement("line", { x1:15.41, y1:6.51, x2:8.59, y2:10.49 })
+  );
+};
+const CheckCircle2 = (props) => {
+  const { className = "", ...rest } = props || {};
+  return React.createElement("svg", { className, xmlns:"http://www.w3.org/2000/svg", width:24, height:24, viewBox:"0 0 24 24", fill:"none", stroke:"currentColor", strokeWidth:2, strokeLinecap:"round", strokeLinejoin:"round", ...rest },
+    React.createElement("circle", { cx:12, cy:12, r:10 }),
+    React.createElement("path", { d:"M9 12l2 2 4-4" })
+  );
+};
+const Download = iconBase(["M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", "M7 10l5 5 5-5", "M12 15V3"]);
+const RefreshCw = iconBase(["M23 4v6h-6", "M1 20v-6h6", "M3.51 9a9 9 0 0 1 14.85-3.36L23 10", "M1 14l4.64 4.36A9 9 0 0 0 20.49 15"]);
+const Eye = (props) => {
+  const { className = "", ...rest } = props || {};
+  return React.createElement("svg", { className, xmlns:"http://www.w3.org/2000/svg", width:24, height:24, viewBox:"0 0 24 24", fill:"none", stroke:"currentColor", strokeWidth:2, strokeLinecap:"round", strokeLinejoin:"round", ...rest },
+    React.createElement("path", { d:"M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" }),
+    React.createElement("circle", { cx:12, cy:12, r:3 })
+  );
+};
+const X = iconBase(["M18 6L6 18", "M6 6l12 12"]);
+
+
+
+function ResearchApp() {
+  const [step, setStep] = useState("consent");
+  const [answers, setAnswers] = useState({});
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Load Pretendard font + check for admin mode
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css";
+    document.head.appendChild(link);
+
+    // Set viewport meta to prevent iOS Safari from leaving the page zoomed in
+    // after focusing an input. maximum-scale=1 + user-scalable handling.
+    let viewportMeta = document.querySelector('meta[name="viewport"]');
+    let createdViewport = false;
+    const prevViewportContent = viewportMeta ? viewportMeta.getAttribute("content") : null;
+    if (!viewportMeta) {
+      viewportMeta = document.createElement("meta");
+      viewportMeta.name = "viewport";
+      document.head.appendChild(viewportMeta);
+      createdViewport = true;
+    }
+    viewportMeta.setAttribute(
+      "content",
+      "width=device-width, initial-scale=1, maximum-scale=1"
+    );
+
+    // Force all text inputs/textareas to >=16px font so iOS Safari does not
+    // auto-zoom on focus (the root cause of the stuck-zoom problem)
+    const styleEl = document.createElement("style");
+    styleEl.setAttribute("data-research-app", "true");
+    styleEl.textContent = `
+      input[type="text"], input[type="tel"], input[type="email"], input[type="number"], textarea {
+        font-size: 16px !important;
+      }
+    `;
+    document.head.appendChild(styleEl);
+
+    // Check URL params for admin mode (query string AND hash)
+    // Admin password — change this to your own secret string before sharing the survey link
+    const ADMIN_PASSWORD = "yonsei-hci-2026";
+    try {
+      // Try the query string first (works in preview / direct hosting)
+      const params = new URLSearchParams(window.location.search);
+      let isAdminParam = params.get("admin") === ADMIN_PASSWORD;
+
+      // Also check the hash (e.g. #admin=...), which sometimes survives iframe embedding
+      if (!isAdminParam && window.location.hash) {
+        const hash = window.location.hash.replace(/^#/, "");
+        const hashParams = new URLSearchParams(hash);
+        if (hashParams.get("admin") === ADMIN_PASSWORD) {
+          isAdminParam = true;
+        }
+      }
+
+      // Last resort: try the top-level (parent) URL in case we are inside an iframe
+      if (!isAdminParam) {
+        try {
+          const refUrl = document.referrer || "";
+          if (refUrl.includes("admin=" + ADMIN_PASSWORD)) {
+            isAdminParam = true;
+          }
+        } catch (e) {
+          // cross-origin referrer access can fail — ignore
+        }
+      }
+
+      if (isAdminParam) {
+        setIsAdmin(true);
+      }
+    } catch (e) {
+      // ignore — fall through to normal survey
+    }
+
+    return () => {
+      try { document.head.removeChild(link); } catch (e) {}
+      try { document.head.removeChild(styleEl); } catch (e) {}
+      try {
+        if (createdViewport) {
+          document.head.removeChild(viewportMeta);
+        } else if (prevViewportContent !== null) {
+          viewportMeta.setAttribute("content", prevViewportContent);
+        }
+      } catch (e) {}
+    };
+  }, []);
+
+  // Scroll to top whenever the step changes (improves UX since long pages
+  // would otherwise leave the user mid-scroll when navigating to a new step)
+  useEffect(() => {
+    try {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (e) {
+      // Fallback for browsers without smooth scroll support
+      window.scrollTo(0, 0);
+    }
+  }, [step]);
+
+  const handleAnswer = (key, value, nextStep, terminate = false) => {
+    setAnswers({ ...answers, [key]: value });
+    setStep(terminate ? "terminated" : nextStep);
+  };
+
+  const goBack = () => {
+    if (step === "s2") setStep("s1");
+    else if (step === "s3") setStep("s2");
+    else if (step === "s1") setStep("consent");
+  };
+
+  // Secret admin entry: tap the consent-page title 5 times quickly, then
+  // enter the password. This works in any environment (including iframe-
+  // embedded public artifacts where URL params may not be readable).
+  const tapCountRef = useRef(0);
+  const tapTimerRef = useRef(null);
+  const handleSecretTap = () => {
+    tapCountRef.current += 1;
+    if (tapTimerRef.current) clearTimeout(tapTimerRef.current);
+    tapTimerRef.current = setTimeout(() => {
+      tapCountRef.current = 0;
+    }, 1500);
+    if (tapCountRef.current >= 5) {
+      tapCountRef.current = 0;
+      const ADMIN_PASSWORD = "yonsei-hci-2026";
+      try {
+        const entered = window.prompt("관리자 비밀번호를 입력하세요");
+        if (entered === ADMIN_PASSWORD) {
+          setIsAdmin(true);
+        } else if (entered !== null) {
+          window.alert("비밀번호가 올바르지 않습니다.");
+        }
+      } catch (e) {
+        // prompt blocked — ignore
+      }
+    }
+  };
+
+  // Admin view bypasses the survey entirely
+  if (isAdmin) {
+    return (
+      <div
+        className="min-h-screen bg-stone-50 text-stone-900"
+        style={{ fontFamily: "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif" }}
+      >
+        <AdminPage />
       </div>
-      <div class="info-row">
-        <span class="icon">📱</span>
-        <span>본인의 최근 <strong>AI 대화 1건</strong> 필요</span>
-      </div>
-      <div class="info-row">
-        <span class="icon">🎁</span>
-        <span>완료 시 <strong>투썸 커피 기프티콘</strong></span>
+    );
+  }
+
+  return (
+    <div
+      className="min-h-screen bg-stone-50 text-stone-900"
+      style={{ fontFamily: "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif" }}
+    >
+      <div className="max-w-md sm:max-w-xl lg:max-w-3xl mx-auto px-5 py-8 sm:py-12">
+        {/* Screening progress indicator */}
+        {(step === "s1" || step === "s2" || step === "s3") && (
+          <div className="flex items-center justify-center gap-2 mb-8">
+            <Dot active={step === "s1"} done={step !== "s1"} />
+            <div className="h-px w-6 bg-stone-300"></div>
+            <Dot active={step === "s2"} done={step === "s3"} />
+            <div className="h-px w-6 bg-stone-300"></div>
+            <Dot active={step === "s3"} done={false} />
+          </div>
+        )}
+
+        {/* Main survey progress bar */}
+        {(step === "a" || step === "b" || step === "c" || step === "d" || step === "e") && (
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-2 text-xs text-stone-500">
+              <span>회상 단계</span>
+              <span>
+                {step === "a" && "1 / 5"}
+                {step === "b" && "2 / 5"}
+                {step === "c" && "3 / 5"}
+                {step === "d" && "4 / 5"}
+                {step === "e" && "5 / 5"}
+              </span>
+            </div>
+            <div className="h-1 bg-stone-200 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-indigo-600 transition-all duration-500"
+                style={{
+                  width:
+                    step === "a"
+                      ? "20%"
+                      : step === "b"
+                      ? "40%"
+                      : step === "c"
+                      ? "60%"
+                      : step === "d"
+                      ? "80%"
+                      : "100%",
+                }}
+              ></div>
+            </div>
+          </div>
+        )}
+
+        {/* Reveal section progress bar */}
+        {(step === "f" || step === "g" || step === "h" || step === "i") && (
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-2 text-xs text-stone-500">
+              <span>마지막 단계</span>
+              <span>
+                {step === "f" && "1 / 4"}
+                {step === "g" && "2 / 4"}
+                {step === "h" && "3 / 4"}
+                {step === "i" && "4 / 4"}
+              </span>
+            </div>
+            <div className="h-1 bg-stone-200 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-amber-600 transition-all duration-500"
+                style={{
+                  width:
+                    step === "f"
+                      ? "25%"
+                      : step === "g"
+                      ? "50%"
+                      : step === "h"
+                      ? "75%"
+                      : "100%",
+                }}
+              ></div>
+            </div>
+          </div>
+        )}
+
+        {/* Pages */}
+        {step === "consent" && <ConsentPage onNext={() => setStep("s1")} onSecretTap={handleSecretTap} />}
+
+        {step === "s1" && (
+          <ScreeningQuestion
+            stepLabel="질문 1 / 3"
+            question="최근 1개월 내에 ChatGPT, Claude, Gemini 같은 AI 챗봇을 사용해 무언가를 결정하거나 선택하는 데 도움을 받은 적이 있나요?"
+            hint="고민되는 상황에 어떤 선택을 할 지 결정하는 데 도움을 받은 순간을 의미합니다. 어떤 제품을 살지, 어떻게 답장할지, 어디 갈지 등 작은 결정도 포함됩니다."
+            options={[
+              { value: "yes", label: "네, 있습니다", terminate: false },
+              { value: "no", label: "아니오, 없습니다", terminate: true },
+              { value: "unsure", label: "잘 모르겠습니다", terminate: true },
+            ]}
+            onAnswer={(v, t) => handleAnswer("s1", v, "s2", t)}
+            onBack={goBack}
+          />
+        )}
+
+        {step === "s2" && (
+          <ScreeningQuestion
+            stepLabel="질문 2 / 3"
+            question="가장 최근에 AI와 결정을 내리기 위한 대화를 한 것은 언제인가요?"
+            hint={null}
+            options={[
+              { value: "today", label: "오늘 또는 어제", terminate: false },
+              { value: "2-3days", label: "2~3일 전", terminate: false },
+              { value: "4-7days", label: "4~7일 전", terminate: false },
+              { value: "1-2weeks", label: "1~2주 전", terminate: false },
+              { value: "older", label: "2주 이전", terminate: false },
+            ]}
+            onAnswer={(v, t) => handleAnswer("s2", v, "s3", t)}
+            onBack={goBack}
+          />
+        )}
+
+        {step === "s3" && (
+          <ScreeningQuestion
+            stepLabel="질문 3 / 3"
+            question="해당 대화 기록을 지금 열어서 확인할 수 있나요?"
+            hint="잠시 ChatGPT, Claude, Gemini 등 사용하시는 AI를 열어서 확인해보세요. 로그인 된 같은 기기/계정이라면 사이드바에 기록이 남아있습니다."
+            options={[
+              { value: "yes", label: "네, 지금 열어볼 수 있습니다", terminate: false },
+              { value: "no", label: "아니오, 기록이 없거나 로그인이 안 된 상태입니다", terminate: true },
+            ]}
+            onAnswer={(v, t) => handleAnswer("s3", v, "passed", t)}
+            onBack={goBack}
+          />
+        )}
+
+        {step === "passed" && <PassedPage onNext={() => setStep("a")} />}
+        {step === "a" && (
+          <PageA
+            onNext={(data) => {
+              setAnswers({ ...answers, ...data });
+              setStep("b");
+            }}
+            onBack={() => setStep("passed")}
+          />
+        )}
+        {step === "b" && (
+          <PageB
+            onNext={() => setStep("c")}
+            onBack={() => setStep("a")}
+          />
+        )}
+        {step === "c" && (
+          <PageC
+            onNext={(data) => {
+              setAnswers({ ...answers, ...data });
+              setStep("d");
+            }}
+            onBack={() => setStep("b")}
+          />
+        )}
+        {step === "d" && (
+          <PageD
+            onNext={(data) => {
+              setAnswers({ ...answers, ...data });
+              setStep("e");
+            }}
+            onBack={() => setStep("c")}
+          />
+        )}
+        {step === "e" && (
+          <PageE
+            onNext={(data) => {
+              setAnswers({ ...answers, ...data });
+              setStep("f");
+            }}
+            onBack={() => setStep("d")}
+          />
+        )}
+        {step === "f" && (
+          <PageF
+            onNext={() => setStep("g")}
+            onBack={() => setStep("e")}
+          />
+        )}
+        {step === "g" && (
+          <PageG
+            onNext={(data) => {
+              setAnswers({ ...answers, ...data });
+              setStep("h");
+            }}
+            onBack={() => setStep("f")}
+          />
+        )}
+        {step === "h" && (
+          <PageH
+            onNext={(data) => {
+              setAnswers({ ...answers, ...data });
+              setStep("i");
+            }}
+            onBack={() => setStep("g")}
+          />
+        )}
+        {step === "i" && (
+          <PageI
+            onNext={(data) => {
+              const finalAnswers = { ...answers, ...data };
+              // Generate participant ID
+              const ts = new Date();
+              const pad = (n) => String(n).padStart(2, "0");
+              const dateStr =
+                ts.getFullYear() +
+                pad(ts.getMonth() + 1) +
+                pad(ts.getDate());
+              const rand = Math.random().toString(36).substring(2, 6);
+              const participantId = `${dateStr}_${rand}`;
+              const submission = {
+                participantId,
+                submittedAt: ts.toISOString(),
+                ...finalAnswers,
+              };
+              setAnswers(submission);
+
+              // Move to complete page IMMEDIATELY — saving must never block this
+              setStep("complete");
+
+              // Persist to Supabase in the background (fire and forget)
+              try {
+                saveResponseToSupabase(participantId, submission).catch((e) => {
+                  console.error("Failed to save response:", e);
+                });
+              } catch (e) {
+                console.error("Save error:", e);
+              }
+            }}
+            onBack={() => setStep("h")}
+            allAnswers={answers}
+          />
+        )}
+        {step === "complete" && <CompletePage answers={answers} />}
+        {step === "terminated" && <TerminatedPage />}
       </div>
     </div>
+  );
+}
 
-    <a class="start-btn" href="https://claude.ai/public/artifacts/202c30bc-2736-4f92-bda3-ade128085ddd" target="_blank" rel="noopener noreferrer">
-      설문 시작하기
-      <span class="arrow">→</span>
-    </a>
+function Dot({ active, done }) {
+  return (
+    <div
+      className={
+        "rounded-full transition-all duration-300 " +
+        (active
+          ? "w-3 h-3 bg-indigo-600"
+          : done
+          ? "w-2 h-2 bg-indigo-300"
+          : "w-2 h-2 bg-stone-300")
+      }
+    ></div>
+  );
+}
 
-    <p class="footnote">
-      자발적 참여이며 언제든 중단하실 수 있습니다.
-    </p>
-  </div>
+function ConsentPage({ onNext, onSecretTap }) {
+  return (
+    <div className="bg-white rounded-3xl border border-stone-200 p-7 sm:p-9 lg:p-11 shadow-sm">
+      <div className="flex items-center gap-2 mb-1">
+        <Sparkles className="w-4 h-4 text-indigo-500" />
+        <span className="text-xs tracking-wider text-indigo-600 font-medium uppercase">
+          Research Study
+        </span>
+      </div>
+      <h1
+        onClick={onSecretTap}
+        className="text-2xl sm:text-3xl font-semibold mt-3 mb-2 leading-tight"
+      >
+        AI 챗봇 사용 회고 연구
+      </h1>
+      <p className="text-stone-600 text-sm sm:text-base leading-relaxed mb-7">
+        안녕하세요, 연구에 참여해 주셔서 감사합니다! 본 연구는 연세대학교
+        정보대학원에서 진행되며, 최근 LLM과 나눈 대화를 회고하는 설문 형태로
+        진행됩니다.
+      </p>
+
+      <div className="space-y-3 mb-8">
+        <InfoRow icon="⏱️" label="소요 시간" value="약 12~15분" />
+        <InfoRow icon="📱" label="필요한 것" value="본인의 최근 ChatGPT/Claude/Gemini 대화 1건" />
+        <InfoRow
+          icon="🔒"
+          label="개인정보"
+          value="익명 처리 · 연구 목적 사용 후 폐기"
+        />
+        <InfoRow icon="🎁" label="감사의 마음" value="완료 시 투썸 커피 기프티콘" />
+      </div>
+
+      <div className="bg-stone-50 rounded-2xl p-5 mb-7 border border-stone-100 space-y-3">
+        <p className="text-sm text-stone-700 leading-relaxed">
+          본격적인 설문에 앞서 연구 진행을 위해 몇 가지 간단한 질문을 드리며,
+          조건에 해당하시는 분들께만 본 설문이 진행됩니다. 양해 부탁드립니다.
+        </p>
+        <p className="text-sm text-stone-700 leading-relaxed">
+          <strong className="font-medium">본 연구 참여는 자발적이며, 언제든지 중단하실 수 있습니다.</strong>{" "}
+          수집된 응답은 익명으로 처리되며, 오직 연구 목적으로만 사용된 후
+          안전한 절차를 거쳐 폐기됩니다.
+        </p>
+      </div>
+
+      <button
+        onClick={onNext}
+        className="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white py-4 rounded-2xl font-medium flex items-center justify-center gap-2 transition-colors text-base"
+      >
+        시작하기
+        <ArrowRight className="w-4 h-4" />
+      </button>
+      <p className="text-xs text-stone-400 text-center mt-4">
+        시작하기를 누르시면 위 내용에 동의하시는 것으로 간주됩니다.
+      </p>
+    </div>
+  );
+}
+
+function InfoRow({ icon, label, value }) {
+  return (
+    <div className="flex items-center gap-3">
+      <span className="text-xl flex-shrink-0">{icon}</span>
+      <div className="flex-1 flex items-baseline justify-between gap-3 border-b border-stone-100 pb-2">
+        <span className="text-sm text-stone-500">{label}</span>
+        <span className="text-sm text-stone-800 text-right">{value}</span>
+      </div>
+    </div>
+  );
+}
+
+function ScreeningQuestion({ stepLabel, question, hint, options, onAnswer, onBack }) {
+  const [selected, setSelected] = useState(null);
+
+  const handleNext = () => {
+    if (!selected) return;
+    const opt = options.find((o) => o.value === selected);
+    onAnswer(selected, opt.terminate);
+  };
+
+  return (
+    <div className="bg-white rounded-3xl border border-stone-200 p-7 sm:p-9 lg:p-11 shadow-sm">
+      <button
+        onClick={onBack}
+        className="flex items-center gap-1 text-stone-400 hover:text-stone-600 text-sm mb-5 transition-colors"
+      >
+        <ArrowLeft className="w-3 h-3" />
+        이전
+      </button>
+
+      <p className="text-xs tracking-wider text-indigo-600 font-medium uppercase mb-3">
+        {stepLabel}
+      </p>
+      <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold leading-snug mb-3">
+        {question}
+      </h2>
+      {hint && (
+        <p className="text-sm text-stone-500 leading-relaxed mb-6">{hint}</p>
+      )}
+
+      <div className="space-y-2 mb-7 mt-6">
+        {options.map((opt) => (
+          <button
+            key={opt.value}
+            onClick={() => setSelected(opt.value)}
+            className={
+              "w-full text-left px-5 py-4 rounded-2xl border transition-all text-sm sm:text-base " +
+              (selected === opt.value
+                ? "border-indigo-500 bg-indigo-50 text-indigo-900"
+                : "border-stone-200 bg-white text-stone-700 hover:border-stone-300 hover:bg-stone-50")
+            }
+          >
+            <div className="flex items-center gap-3">
+              <div
+                className={
+                  "w-4 h-4 rounded-full border-2 flex-shrink-0 transition-all " +
+                  (selected === opt.value
+                    ? "border-indigo-600 bg-indigo-600"
+                    : "border-stone-300")
+                }
+              >
+                {selected === opt.value && (
+                  <div className="w-1.5 h-1.5 bg-white rounded-full m-auto mt-0.5"></div>
+                )}
+              </div>
+              <span className="flex-1">{opt.label}</span>
+            </div>
+          </button>
+        ))}
+      </div>
+
+      <button
+        onClick={handleNext}
+        disabled={!selected}
+        className={
+          "w-full py-4 rounded-2xl font-medium flex items-center justify-center gap-2 transition-all text-base " +
+          (selected
+            ? "bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white"
+            : "bg-stone-100 text-stone-400 cursor-not-allowed")
+        }
+      >
+        다음
+        <ArrowRight className="w-4 h-4" />
+      </button>
+    </div>
+  );
+}
+
+function PassedPage({ onNext }) {
+  return (
+    <div className="bg-white rounded-3xl border border-stone-200 p-7 sm:p-9 lg:p-11 shadow-sm text-center">
+      <div className="w-16 h-16 rounded-full bg-emerald-50 flex items-center justify-center mx-auto mb-5">
+        <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+      </div>
+      <h2 className="text-2xl font-semibold mb-7">본 설문이 시작됩니다</h2>
+      <div className="bg-indigo-50 rounded-2xl p-5 text-left border border-indigo-100 mb-7">
+        <p className="text-sm text-indigo-900 leading-relaxed">
+          <strong className="font-medium">📋 시작 전 안내</strong>
+          <br />
+          <span className="text-indigo-700 text-sm">
+            본 설문은 4단계로 진행됩니다. 먼저 평소 AI 사용에 대한 짧은 질문을
+            드리고, AI를 활용해 결정을 내렸던 구체적인 대화에 대한 질문이 이어집니다.
+          </span>
+        </p>
+      </div>
+      <button
+        onClick={onNext}
+        className="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white py-4 rounded-2xl font-medium flex items-center justify-center gap-2 transition-colors text-base"
+      >
+        본 설문 시작하기
+        <ArrowRight className="w-4 h-4" />
+      </button>
+    </div>
+  );
+}
+
+// ===== Reusable scale components =====
+
+function LikertScale({ value, onChange, leftLabel, rightLabel, min = 1, max = 7, showArrows = false }) {
+  const options = [];
+  for (let i = min; i <= max; i++) options.push(i);
+  return (
+    <div className="mt-4">
+      <div className="flex items-center justify-between gap-2">
+        {options.map((n) => (
+          <button
+            key={n}
+            onClick={() => onChange(n)}
+            className={
+              "flex-1 aspect-square rounded-xl border-2 text-sm font-medium transition-all " +
+              (value === n
+                ? "border-indigo-600 bg-indigo-600 text-white"
+                : "border-stone-200 bg-white text-stone-500 hover:border-stone-300")
+            }
+          >
+            {n}
+          </button>
+        ))}
+      </div>
+      {(leftLabel || rightLabel) && (
+        <div className="flex items-stretch justify-between mt-3 gap-3">
+          <div className="flex-1 max-w-[45%] flex items-start gap-1">
+            {showArrows && (
+              <span className="text-indigo-400 text-xs font-bold leading-tight mt-px">←</span>
+            )}
+            <span className="text-xs text-stone-500 leading-tight text-left">
+              {leftLabel}
+            </span>
+          </div>
+          <div className="flex-1 max-w-[45%] flex items-start justify-end gap-1">
+            <span className="text-xs text-stone-500 leading-tight text-right">
+              {rightLabel}
+            </span>
+            {showArrows && (
+              <span className="text-indigo-400 text-xs font-bold leading-tight mt-px">→</span>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SliderScale({ value, onChange, leftLabel, rightLabel, showArrows = false }) {
+  return (
+    <div className="mt-4">
+      <div className="flex items-center justify-center mb-3">
+        <span className="text-3xl font-semibold text-indigo-600">{value}</span>
+        <span className="text-sm text-stone-400 ml-1">/ 100</span>
+      </div>
+      <input
+        type="range"
+        min="0"
+        max="100"
+        step="5"
+        value={value}
+        onChange={(e) => onChange(parseInt(e.target.value))}
+        className="w-full h-2 bg-stone-200 rounded-full appearance-none cursor-pointer accent-indigo-600"
+        style={{
+          background: `linear-gradient(to right, rgb(79 70 229) 0%, rgb(79 70 229) ${value}%, rgb(231 229 228) ${value}%, rgb(231 229 228) 100%)`,
+        }}
+      />
+      {(leftLabel || rightLabel) && (
+        <div className="flex items-stretch justify-between mt-2 gap-3">
+          <div className="flex-1 max-w-[45%] flex items-start gap-1">
+            {showArrows && (
+              <span className="text-indigo-400 text-xs font-bold leading-tight mt-px">←</span>
+            )}
+            <span className="text-xs text-stone-500 leading-tight text-left">
+              {leftLabel}
+            </span>
+          </div>
+          <div className="flex-1 max-w-[45%] flex items-start justify-end gap-1">
+            <span className="text-xs text-stone-500 leading-tight text-right">
+              {rightLabel}
+            </span>
+            {showArrows && (
+              <span className="text-indigo-400 text-xs font-bold leading-tight mt-px">→</span>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DualSlider({ valueAI, onChange }) {
+  const valueSelf = 100 - valueAI;
+  return (
+    <div className="mt-4">
+      <div className="flex items-center justify-between mb-3 px-1">
+        <div className="text-center">
+          <div className="text-xs text-stone-500 mb-1">본인</div>
+          <div className="text-2xl font-semibold text-indigo-600">{valueSelf}%</div>
+        </div>
+        <div className="text-stone-300 text-xl">·</div>
+        <div className="text-center">
+          <div className="text-xs text-stone-500 mb-1">AI</div>
+          <div className="text-2xl font-semibold text-indigo-600">{valueAI}%</div>
+        </div>
+      </div>
+      <input
+        type="range"
+        min="0"
+        max="100"
+        step="5"
+        value={valueAI}
+        onChange={(e) => onChange(parseInt(e.target.value))}
+        className="w-full h-2 bg-stone-200 rounded-full appearance-none cursor-pointer accent-indigo-600"
+        style={{
+          background: `linear-gradient(to right, rgb(79 70 229) 0%, rgb(79 70 229) ${valueAI}%, rgb(231 229 228) ${valueAI}%, rgb(231 229 228) 100%)`,
+        }}
+      />
+      <div className="flex items-center justify-between mt-2 text-xs text-stone-400">
+        <span>전적으로 나의 기여</span>
+        <span>전적으로 AI의 기여</span>
+      </div>
+    </div>
+  );
+}
+
+function QuestionBlock({ children, label }) {
+  return (
+    <div className="border-b border-stone-100 pb-7 mb-7 last:border-b-0 last:pb-0 last:mb-0">
+      {label && (
+        <p className="text-xs tracking-wider text-stone-400 font-medium uppercase mb-2">
+          {label}
+        </p>
+      )}
+      {children}
+    </div>
+  );
+}
+
+function NavButtons({ onBack, onNext, nextDisabled, nextLabel = "다음" }) {
+  return (
+    <div className="flex items-center gap-3 mt-8">
+      <button
+        onClick={onBack}
+        className="px-5 py-3 rounded-2xl border border-stone-200 text-stone-600 hover:bg-stone-50 transition-colors flex items-center gap-1 text-sm font-medium"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        이전
+      </button>
+      <button
+        onClick={onNext}
+        disabled={nextDisabled}
+        className={
+          "flex-1 py-3 rounded-2xl font-medium flex items-center justify-center gap-2 transition-all text-base " +
+          (nextDisabled
+            ? "bg-stone-100 text-stone-400 cursor-not-allowed"
+            : "bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white")
+        }
+      >
+        {nextLabel}
+        <ArrowRight className="w-4 h-4" />
+      </button>
+    </div>
+  );
+}
+
+// ===== Page A: LLM usage frequency + SoAS-7 =====
+
+function PageA({ onNext, onBack }) {
+  const [usageFreq, setUsageFreq] = useState(null);
+  const [soas, setSoas] = useState({ 1: null, 2: null, 3: null, 4: null, 5: null });
+
+  // SoAS — Sense of Positive Agency, Tapal et al. (2017)
+  // Items 1, 8, 9, 12, 13 from original 13-item scale
+  const soasItems = [
+    "내가 하는 일은 모두 내 통제 안에 있다.",
+    "내가 하는 일은 모두 나의 선택에 달려 있다.",
+    "무엇을 언제 할지는 내가 정한다.",
+    "내 행동은 처음부터 끝까지 내가 계획한 것이다.",
+    "내가 한 일에서 비롯되는 모든 결과는 전적으로 내 책임이다.",
+  ];
+
+  const allFilled =
+    usageFreq !== null && Object.values(soas).every((v) => v !== null);
+
+  const handleNext = () => {
+    onNext({ usageFreq, soas });
+  };
+
+  return (
+    <div className="bg-white rounded-3xl border border-stone-200 p-7 sm:p-9 lg:p-11 shadow-sm">
+      <p className="text-xs tracking-wider text-indigo-600 font-medium uppercase mb-3">
+        평소 AI 사용에 대하여
+      </p>
+      <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold leading-snug mb-2">
+        평소 AI 사용 패턴
+      </h2>
+      <p className="text-sm sm:text-base text-stone-500 mb-8 leading-relaxed">
+        일반적으로 AI를 어떻게 사용하시는지 알려주세요.
+      </p>
+
+      <QuestionBlock label="질문 1">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          평소 ChatGPT, Claude, Gemini 같은 AI 챗봇을 얼마나 자주 사용하시나요?
+        </p>
+        <div className="mt-4 space-y-2">
+          {[
+            { v: "daily", l: "매일" },
+            { v: "4-5weekly", l: "주 4~5회" },
+            { v: "2-3weekly", l: "주 2~3회" },
+            { v: "less", l: "주 1회 미만" },
+          ].map((opt) => (
+            <button
+              key={opt.v}
+              onClick={() => setUsageFreq(opt.v)}
+              className={
+                "w-full text-left px-4 py-3 rounded-xl border transition-all text-sm " +
+                (usageFreq === opt.v
+                  ? "border-indigo-500 bg-indigo-50 text-indigo-900"
+                  : "border-stone-200 bg-white text-stone-700 hover:border-stone-300")
+              }
+            >
+              {opt.l}
+            </button>
+          ))}
+        </div>
+      </QuestionBlock>
+
+      <div className="mb-6">
+        <p className="text-xs tracking-wider text-stone-400 font-medium uppercase mb-3">
+          질문 2~6 · 일상의 행동감 (Sense of Agency)
+        </p>
+        <p className="text-sm text-stone-600 leading-relaxed">
+          다음 문장들이 평소 본인의 경험과 얼마나 일치하는지 답해주세요.
+          <br />
+          <span className="text-stone-400 text-xs">
+            1점(전혀 그렇지 않다) ~ 7점(매우 그렇다)
+          </span>
+        </p>
+      </div>
+
+      {soasItems.map((item, idx) => (
+        <QuestionBlock key={idx} label={`문항 ${idx + 1}`}>
+          <p className="text-base sm:text-lg text-stone-800 leading-relaxed">{item}</p>
+          <LikertScale
+            value={soas[idx + 1]}
+            onChange={(v) => setSoas({ ...soas, [idx + 1]: v })}
+            leftLabel="전혀 그렇지 않다"
+            rightLabel="매우 그렇다"
+          />
+        </QuestionBlock>
+      ))}
+
+      <NavButtons
+        onBack={onBack}
+        onNext={handleNext}
+        nextDisabled={!allFilled}
+      />
+    </div>
+  );
+}
+
+// ===== Page B: Conversation recall instruction =====
+
+function PageB({ onNext, onBack }) {
+  return (
+    <div className="bg-white rounded-3xl border border-stone-200 p-7 sm:p-9 lg:p-11 shadow-sm">
+      <div className="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center mb-5">
+        <span className="text-2xl">💭</span>
+      </div>
+      <p className="text-xs tracking-wider text-amber-700 font-medium uppercase mb-3">
+        확인해주세요
+      </p>
+      <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold leading-snug mb-4">
+        이제 가장 최근에 AI를 활용해 결정을 내렸던 대화 하나를 떠올려주세요
+      </h2>
+
+      <div className="space-y-4 mb-7 text-sm text-stone-700 leading-relaxed">
+        <p>
+          결정이 필요한 상황에 AI를 활용했던 대화에 대해 질문을 드리겠습니다.
+        </p>
+        <div className="bg-amber-50 border border-amber-100 rounded-2xl p-5 space-y-3">
+          <p className="font-medium text-amber-900">📌 답변 시 유의사항</p>
+          <p className="text-amber-800">
+            이어질 질문들은{" "}
+            <strong className="font-semibold">대화 기록을 보지 마시고, 기억으로만</strong>{" "}
+            답해주세요. 대화 기록은 다음 단계에서 다시 열어보도록 하겠습니다.
+          </p>
+        </div>
+        <p>준비되시면 아래 버튼을 눌러주세요.</p>
+      </div>
+
+      <NavButtons
+        onBack={onBack}
+        onNext={onNext}
+        nextDisabled={false}
+        nextLabel="네, 알겠습니다"
+      />
+    </div>
+  );
+}
+
+// ===== Page C: Self-prompt recall (decision context + Q4, Q5, Q5b) =====
+
+function PageC({ onNext, onBack }) {
+  const [decisionDesc, setDecisionDesc] = useState("");
+  const [q4, setQ4] = useState("");
+  const [q5, setQ5] = useState(50);
+
+  const allFilled = decisionDesc.trim().length > 0 && q4.trim().length > 0;
+
+  const handleNext = () => {
+    onNext({
+      decisionDescription: decisionDesc,
+      q4_promptRecall: q4,
+      q5_promptContentEstimate: q5,
+    });
+  };
+
+  return (
+    <div className="bg-white rounded-3xl border border-stone-200 p-7 sm:p-9 lg:p-11 shadow-sm">
+      <p className="text-xs tracking-wider text-indigo-600 font-medium uppercase mb-3">
+        AI와 함께한 그 결정
+      </p>
+      <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold leading-snug mb-2">
+        본인이 보낸 메시지를 기억해보세요
+      </h2>
+      <p className="text-sm sm:text-base text-stone-500 mb-8 leading-relaxed">
+        대화 기록은 아직 보지 마시고, 기억으로만 답해주세요.
+      </p>
+
+      <QuestionBlock label="질문 1">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          어떤 결정을 AI를 활용해서 내리셨나요?
+        </p>
+        <p className="text-xs text-stone-400 mt-2 mb-3">
+          한 줄로 간단히 적어주세요. 예: "어떤 요금제로 바꿀지", "친구에게 어떻게
+          답장할지" 등
+        </p>
+        <textarea
+          value={decisionDesc}
+          onChange={(e) => setDecisionDesc(e.target.value)}
+          placeholder="예: 새로 살 노트북 모델 선택"
+          className="w-full min-h-[60px] px-4 py-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 placeholder:text-stone-400 focus:outline-none focus:border-indigo-500 transition-colors resize-y leading-relaxed"
+        />
+      </QuestionBlock>
+
+      <QuestionBlock label="질문 2">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          해당 대화에서{" "}
+          <strong className="font-semibold">첫 메시지</strong>에 어떤 내용을
+          적었는지, 기억나는 대로 적어주세요.
+        </p>
+        <p className="text-xs text-stone-400 mt-2 mb-3">
+          자유롭게 작성해주세요. 구체적일수록 좋습니다.
+        </p>
+        <textarea
+          value={q4}
+          onChange={(e) => setQ4(e.target.value)}
+          placeholder="예: 노트북 모델을 추천해달라고 했고, 내 사용 패턴을 함께 적었던 것 같다."
+          className="w-full min-h-[120px] px-4 py-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 placeholder:text-stone-400 focus:outline-none focus:border-indigo-500 transition-colors resize-y leading-relaxed"
+        />
+      </QuestionBlock>
+
+      <QuestionBlock label="질문 3">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          그 첫 메시지가 내리고자 하는 결정과 관련해 얼마나 많은 정보를 담고
+          있었다고 생각하시나요?
+        </p>
+        <p className="text-xs text-stone-400 mt-2">
+          예: 본인의 상황, 선호, 조건, 이미 마음에 있던 방향 등
+        </p>
+        <SliderScale
+          value={q5}
+          onChange={setQ5}
+          leftLabel="거의 없었다"
+          rightLabel="아주 많았다"
+        />
+      </QuestionBlock>
+
+      <NavButtons
+        onBack={onBack}
+        onNext={handleNext}
+        nextDisabled={!allFilled}
+      />
+    </div>
+  );
+}
+
+// ===== Page D: AI's first response recall (free recall + Wegner 3-1, 3-2) =====
+
+function PageD({ onNext, onBack }) {
+  const [aiResponseRecall, setAiResponseRecall] = useState("");
+  const [q3a, setQ3a] = useState(null);
+  const [q3b, setQ3b] = useState(null);
+  const [q5b, setQ5b] = useState(null);
+
+  const allFilled =
+    aiResponseRecall.trim().length > 0 &&
+    q3a !== null &&
+    q3b !== null &&
+    q5b !== null;
+
+  const handleNext = () => {
+    onNext({
+      aiFirstResponseRecall: aiResponseRecall,
+      q3a_priority: q3a,
+      q3b_consistency: q3b,
+      q5b_confirmationSeekingAwareness: q5b,
+    });
+  };
+
+  return (
+    <div className="bg-white rounded-3xl border border-stone-200 p-7 sm:p-9 lg:p-11 shadow-sm">
+      <p className="text-xs tracking-wider text-indigo-600 font-medium uppercase mb-3">
+        AI의 첫 응답에 대하여
+      </p>
+      <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold leading-snug mb-2">
+        AI의 첫 답변을 떠올려보세요
+      </h2>
+      <p className="text-sm sm:text-base text-stone-500 mb-8 leading-relaxed">
+        이 페이지의 문항은 모두{" "}
+        <strong className="font-medium text-stone-700">AI의 첫 응답</strong>을
+        기준으로 답해주세요. 대화 기록은 아직 보지 마시고, 기억으로만
+        답해주세요.
+      </p>
+
+      <QuestionBlock label="질문 1">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          AI가 보낸{" "}
+          <strong className="font-semibold">첫 응답</strong>이 어떤 내용이었는지,
+          기억나는 대로 적어주세요.
+        </p>
+        <p className="text-xs text-stone-400 mt-2 mb-3">
+          자유롭게 작성해주세요. 구체적일수록 좋습니다.
+        </p>
+        <textarea
+          value={aiResponseRecall}
+          onChange={(e) => setAiResponseRecall(e.target.value)}
+          placeholder="예: 내 사용 패턴을 정리해주고, 그 조건에 맞는 노트북 모델 3개와 우선순위를 추천해주었다."
+          className="w-full min-h-[120px] px-4 py-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 placeholder:text-stone-400 focus:outline-none focus:border-indigo-500 transition-colors resize-y leading-relaxed"
+        />
+      </QuestionBlock>
+
+      <QuestionBlock label="질문 2">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          AI의 첫 응답이 오기 전에, 내가 원하는 방향이 어느 정도 있었다.
+        </p>
+        <LikertScale
+          value={q3a}
+          onChange={setQ3a}
+          leftLabel="전혀 그렇지 않다"
+          rightLabel="매우 그렇다"
+        />
+      </QuestionBlock>
+
+      <QuestionBlock label="질문 3">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          AI의 첫 응답이 내 원래 생각과 일치했다.
+        </p>
+        <LikertScale
+          value={q3b}
+          onChange={setQ3b}
+          leftLabel="전혀 그렇지 않다"
+          rightLabel="매우 그렇다"
+        />
+      </QuestionBlock>
+
+      <QuestionBlock label="질문 4">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          평소 AI에게 물어볼 때, 본인은 어느 쪽 사용 방식에 더 가까우신가요?
+        </p>
+        <p className="text-xs text-stone-400 mt-2">
+          이번 대화가 아니라 평소 본인의 사용 패턴에 대한 질문입니다.
+        </p>
+        <LikertScale
+          value={q5b}
+          onChange={setQ5b}
+          leftLabel="이미 마음에 있는 답을 확인하려고 쓴다"
+          rightLabel="아직 답이 없어서 정보를 얻으려고 쓴다"
+          showArrows={true}
+        />
+      </QuestionBlock>
+
+      <NavButtons
+        onBack={onBack}
+        onNext={handleNext}
+        nextDisabled={!allFilled}
+      />
+    </div>
+  );
+}
+
+// ===== Page E: Final decision attribution (consistency check + Q1, Q2, Wegner 3-3) =====
+
+function PageE({ onNext, onBack }) {
+  const [finalVsFirst, setFinalVsFirst] = useState(null);
+  const [q1, setQ1] = useState(50);
+  const [q2, setQ2] = useState(50); // AI 책임 % (0 = 전부 나의 책임, 100 = 전부 AI의 책임)
+  const [q3c, setQ3c] = useState(null);
+
+  const allFilled = finalVsFirst !== null && q3c !== null;
+
+  const handleNext = () => {
+    onNext({
+      finalVsFirstResponse: finalVsFirst,
+      q1_decisionAutonomy: q1,
+      q2_contributionAI: q2,
+      q3c_exclusivity: q3c,
+    });
+  };
+
+  return (
+    <div className="bg-white rounded-3xl border border-stone-200 p-7 sm:p-9 lg:p-11 shadow-sm">
+      <p className="text-xs tracking-wider text-indigo-600 font-medium uppercase mb-3">
+        최종적으로 내린 결정에 대하여
+      </p>
+      <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold leading-snug mb-2">
+        최종적으로 내린 결정을 돌아보세요
+      </h2>
+      <p className="text-sm sm:text-base text-stone-500 mb-8 leading-relaxed">
+        이 페이지의 문항은 모두{" "}
+        <strong className="font-medium text-stone-700">대화 전체와 최종 결정</strong>
+        을 기준으로 답해주세요.
+      </p>
+
+      <QuestionBlock label="질문 1">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          AI와 대화를 이어간 끝에 내린 최종 결정은, AI의 첫 응답과 비교했을 때
+          어땠나요?
+        </p>
+        <div className="mt-4 space-y-2">
+          {[
+            { v: "changed", l: "첫 응답과 다른 방향으로 바뀌었다" },
+            { v: "adjusted", l: "비슷하지만 세부 조정이 있었다" },
+            { v: "same", l: "첫 응답 그대로 결정했다" },
+          ].map((opt) => (
+            <button
+              key={opt.v}
+              onClick={() => setFinalVsFirst(opt.v)}
+              className={
+                "w-full text-left px-4 py-3 rounded-xl border transition-all text-sm " +
+                (finalVsFirst === opt.v
+                  ? "border-indigo-500 bg-indigo-50 text-indigo-900"
+                  : "border-stone-200 bg-white text-stone-700 hover:border-stone-300")
+              }
+            >
+              {opt.l}
+            </button>
+          ))}
+        </div>
+      </QuestionBlock>
+
+      <QuestionBlock label="질문 2">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          최종 결정을 되돌아봤을 때, 얼마나 스스로 판단해서 내린 결정이라고
+          느끼시나요?
+        </p>
+        <SliderScale
+          value={q1}
+          onChange={setQ1}
+          leftLabel="온전히 AI가 결정"
+          rightLabel="온전히 스스로 결정"
+        />
+      </QuestionBlock>
+
+      <QuestionBlock label="질문 3">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          최종 결정에 본인과 AI는 각각 얼마나 기여했다고 생각하시나요?
+        </p>
+        <p className="text-xs text-stone-400 mt-2">
+          슬라이더를 움직여서 본인과 AI의 기여 비율을 조정해주세요.
+        </p>
+        <DualSlider valueAI={q2} onChange={setQ2} />
+      </QuestionBlock>
+
+      <QuestionBlock label="질문 4">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          최종 결정은 추가적인 정보나 다른 사람의 조언 없이, AI와의 대화만으로
+          내려졌다.
+        </p>
+        <LikertScale
+          value={q3c}
+          onChange={setQ3c}
+          leftLabel="전혀 그렇지 않다"
+          rightLabel="매우 그렇다"
+        />
+      </QuestionBlock>
+
+      <NavButtons
+        onBack={onBack}
+        onNext={handleNext}
+        nextDisabled={!allFilled}
+      />
+    </div>
+  );
+}
+
+// ===== Page F: Reveal instruction =====
+
+function PageF({ onNext, onBack }) {
+  return (
+    <div className="bg-white rounded-3xl border border-stone-200 p-7 sm:p-9 lg:p-11 shadow-sm">
+      <div className="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center mb-5">
+        <span className="text-2xl">🔍</span>
+      </div>
+      <p className="text-xs tracking-wider text-amber-700 font-medium uppercase mb-3">
+        마지막 단계입니다
+      </p>
+      <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold leading-snug mb-4">
+        이제 대화 기록을 열어보겠습니다
+      </h2>
+
+      <div className="space-y-4 mb-7 text-sm text-stone-700 leading-relaxed">
+        <p>
+          지금부터는 실제 대화 기록을 확인하고 이를 바탕으로 질문을 드리겠습니다.
+        </p>
+        <div className="bg-amber-50 border border-amber-100 rounded-2xl p-5 space-y-3">
+          <p className="font-medium text-amber-900">📌 다음 단계 안내</p>
+          <p className="text-amber-800">
+            대화를{" "}
+            <strong className="font-semibold">처음부터 끝까지 다시 천천히 읽어주세요.</strong>{" "}
+            특히 본인이 보낸 메시지에 어떤 정보가 들어있었는지, AI 응답이 그
+            정보를 얼마나 다루었는지 의식하면서 읽어주세요.
+          </p>
+          <p className="text-amber-800">
+            그 다음 전체 대화에서 시작과 끝의 질문과 답변 세트를 2개 골라 옮겨
+            적고, 간단한 평가를 해주시는 작업이 이어집니다.
+          </p>
+        </div>
+        <p>대화를 다 읽으셨다면 아래 버튼을 눌러주세요.</p>
+      </div>
+
+      <NavButtons
+        onBack={onBack}
+        onNext={onNext}
+        nextDisabled={false}
+        nextLabel="대화 내용을 확인했습니다"
+      />
+    </div>
+  );
+}
+
+// ===== Page G: Micro-coding (2 pairs) =====
+
+function PageG({ onNext, onBack }) {
+  const [pair1User, setPair1User] = useState("");
+  const [pair1AI, setPair1AI] = useState("");
+  const [pair1Label, setPair1Label] = useState(null);
+  const [pair2User, setPair2User] = useState("");
+  const [pair2AI, setPair2AI] = useState("");
+  const [pair2Label, setPair2Label] = useState(null);
+  const [overallRestate, setOverallRestate] = useState(50);
+
+  const allFilled =
+    pair1User.trim().length > 0 &&
+    pair1AI.trim().length > 0 &&
+    pair1Label !== null &&
+    pair2User.trim().length > 0 &&
+    pair2AI.trim().length > 0 &&
+    pair2Label !== null;
+
+  const handleNext = () => {
+    onNext({
+      pair1: { user: pair1User, ai: pair1AI, label: pair1Label },
+      pair2: { user: pair2User, ai: pair2AI, label: pair2Label },
+      overallRestateEstimate: overallRestate,
+    });
+  };
+
+  return (
+    <div className="bg-white rounded-3xl border border-stone-200 p-7 sm:p-9 lg:p-11 shadow-sm">
+      <p className="text-xs tracking-wider text-amber-700 font-medium uppercase mb-3">
+        대화 다시 보기
+      </p>
+      <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold leading-snug mb-2">
+        대화에서 두 부분을 옮겨주세요
+      </h2>
+      <p className="text-sm text-stone-500 mb-6 leading-relaxed">
+        대화를 다시 보면서 질문과 답변 세트 2개를 골라 복사하여 붙여넣고, AI의
+        응답이 어떤 성격이었는지 평가해주세요.{" "}
+        <strong className="font-semibold text-stone-700">
+          만약 여러 응답 성격이 섞여있다면 가장 두드러지는 한 가지를
+          선택해주세요.
+        </strong>
+      </p>
+
+      <div className="bg-stone-50 border border-stone-200 rounded-2xl p-4 mb-7">
+        <p className="text-xs text-stone-600 leading-relaxed">
+          <strong className="font-medium text-stone-700">📌 옮길 때 안내:</strong>{" "}
+          민감한 개인정보나 제3자 정보가 포함된 경우, 해당 부분을 가리거나 빼고
+          적어주셔도 괜찮습니다.
+        </p>
+      </div>
+
+      <PairBlock
+        title="페어 1 — 대화 초반부"
+        subtitle="당신의 첫 메시지와 그에 대한 AI의 첫 응답"
+        userValue={pair1User}
+        onUserChange={setPair1User}
+        aiValue={pair1AI}
+        onAIChange={setPair1AI}
+        label={pair1Label}
+        onLabelChange={setPair1Label}
+      />
+
+      <PairBlock
+        title="페어 2 — 대화 중·후반부"
+        subtitle="결정에 가장 가까웠다고 느껴지는 부분"
+        userValue={pair2User}
+        onUserChange={setPair2User}
+        aiValue={pair2AI}
+        onAIChange={setPair2AI}
+        label={pair2Label}
+        onLabelChange={setPair2Label}
+      />
+
+      <QuestionBlock label="마지막 질문 · 전체 대화 평가">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          전체 대화를 보셨을 때, AI의 응답 중 내가 입력한 정보의
+          재진술·요약·확인이 어느 정도 비중을 차지했다고 느끼시나요?
+        </p>
+        <p className="text-xs text-stone-400 mt-2">
+          앞에서 옮긴 대화 2개가 아니라, 대화 전체에 대한 인상을 답해주세요.
+        </p>
+        <SliderScale
+          value={overallRestate}
+          onChange={setOverallRestate}
+          leftLabel="대부분 새 정보를 제공"
+          rightLabel="대부분 내 입력을 재진술하거나 내 의견에 동의"
+          showArrows={true}
+        />
+      </QuestionBlock>
+
+      <NavButtons
+        onBack={onBack}
+        onNext={handleNext}
+        nextDisabled={!allFilled}
+      />
+    </div>
+  );
+}
+
+function PairBlock({ title, subtitle, userValue, onUserChange, aiValue, onAIChange, label, onLabelChange }) {
+  const labelOptions = [
+    {
+      v: "NEW",
+      title: "AI가 새 정보·관점 제공",
+      desc: "AI 응답이 내가 보낸 메시지에 없던 새로운 내용·관점·정보를 주로 다룸",
+    },
+    {
+      v: "RESTATE",
+      title: "내가 보낸 메시지의 재진술·요약",
+      desc: "AI 응답이 내가 입력한 내용을 정리하거나 다시 풀어 설명한 것 위주",
+    },
+    {
+      v: "AGREE",
+      title: "나의 의견에 직접 동의·확인",
+      desc: "AI 응답이 내가 이미 가지고 있던 방향이나 의견에 동의하는 형태",
+    },
+  ];
+
+  return (
+    <div className="border border-stone-200 rounded-2xl p-5 mb-5 bg-stone-50/50">
+      <p className="text-sm font-semibold text-stone-800 mb-1">{title}</p>
+      <p className="text-xs text-stone-500 mb-4">{subtitle}</p>
+
+      <div className="mb-4">
+        <label className="text-xs text-stone-600 font-medium mb-2 block">
+          내가 보낸 메시지
+        </label>
+        <textarea
+          value={userValue}
+          onChange={(e) => onUserChange(e.target.value)}
+          placeholder="대화에서 복사해 붙여넣어 주세요"
+          className="w-full min-h-[80px] px-4 py-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 placeholder:text-stone-400 focus:outline-none focus:border-indigo-500 transition-colors resize-y leading-relaxed"
+        />
+      </div>
+
+      <div className="mb-4">
+        <label className="text-xs text-stone-600 font-medium mb-2 block">
+          AI의 응답
+        </label>
+        <textarea
+          value={aiValue}
+          onChange={(e) => onAIChange(e.target.value)}
+          placeholder="대화에서 복사해 붙여넣어 주세요"
+          className="w-full min-h-[100px] px-4 py-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 placeholder:text-stone-400 focus:outline-none focus:border-indigo-500 transition-colors resize-y leading-relaxed"
+        />
+      </div>
+
+      <div>
+        <label className="text-xs text-stone-600 font-medium mb-2 block">
+          이 AI 응답을 어떻게 분류하시겠어요?
+        </label>
+        <p className="text-xs text-stone-500 mb-3 leading-relaxed">
+          여러 응답 성격이 섞여있다면 가장 두드러지는 한 가지를 선택해주세요.
+        </p>
+        <div className="space-y-2">
+          {labelOptions.map((opt) => (
+            <button
+              key={opt.v}
+              onClick={() => onLabelChange(opt.v)}
+              className={
+                "w-full text-left px-4 py-3 rounded-xl border transition-all " +
+                (label === opt.v
+                  ? "border-indigo-500 bg-indigo-50"
+                  : "border-stone-200 bg-white hover:border-stone-300")
+              }
+            >
+              <div className="flex items-start gap-3">
+                <div
+                  className={
+                    "w-4 h-4 rounded-full border-2 flex-shrink-0 transition-all mt-0.5 " +
+                    (label === opt.v
+                      ? "border-indigo-600 bg-indigo-600"
+                      : "border-stone-300")
+                  }
+                >
+                  {label === opt.v && (
+                    <div className="w-1.5 h-1.5 bg-white rounded-full m-auto mt-0.5"></div>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <p
+                    className={
+                      "text-sm font-medium " +
+                      (label === opt.v ? "text-indigo-900" : "text-stone-800")
+                    }
+                  >
+                    {opt.title}
+                  </p>
+                  <p className="text-xs text-stone-500 mt-1 leading-relaxed">
+                    {opt.desc}
+                  </p>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ===== Page H: Post-reveal re-measurement =====
+
+function PageH({ onNext, onBack }) {
+  const [q5Post, setQ5Post] = useState(50);
+  const [q1Post, setQ1Post] = useState(50);
+  const [q2Post, setQ2Post] = useState(50);
+  const [q3aPost, setQ3aPost] = useState(null);
+  const [q3bPost, setQ3bPost] = useState(null);
+  const [q3cPost, setQ3cPost] = useState(null);
+
+  const allFilled = q3aPost !== null && q3bPost !== null && q3cPost !== null;
+
+  const handleNext = () => {
+    onNext({
+      post_q5_promptContentEstimate: q5Post,
+      post_q1_decisionAutonomy: q1Post,
+      post_q2_contributionAI: q2Post,
+      post_q3a_priority: q3aPost,
+      post_q3b_consistency: q3bPost,
+      post_q3c_exclusivity: q3cPost,
+    });
+  };
+
+  return (
+    <div className="bg-white rounded-3xl border border-stone-200 p-7 sm:p-9 lg:p-11 shadow-sm">
+      <p className="text-xs tracking-wider text-amber-700 font-medium uppercase mb-3">
+        대화를 다시 본 후
+      </p>
+      <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold leading-snug mb-2">
+        대화 내용을 떠올리면서 아래 질문에 답해주세요
+      </h2>
+
+      <QuestionBlock label="질문 1 · 본인 메시지 정보 함량">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          본인의 첫 메시지가 결정과 관련해 얼마나 많은 정보를 담고 있었나요?
+        </p>
+        <SliderScale
+          value={q5Post}
+          onChange={setQ5Post}
+          leftLabel="거의 없었다"
+          rightLabel="아주 많았다"
+        />
+      </QuestionBlock>
+
+      <QuestionBlock label="질문 2 · 사전 방향성">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          AI의 첫 응답이 오기 전에, 내가 원하는 방향이 어느 정도 있었다.
+        </p>
+        <LikertScale
+          value={q3aPost}
+          onChange={setQ3aPost}
+          leftLabel="전혀 그렇지 않다"
+          rightLabel="매우 그렇다"
+        />
+      </QuestionBlock>
+
+      <QuestionBlock label="질문 3 · AI 응답 일치도">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          AI의 첫 응답이 내 원래 생각과 일치했다.
+        </p>
+        <LikertScale
+          value={q3bPost}
+          onChange={setQ3bPost}
+          leftLabel="전혀 그렇지 않다"
+          rightLabel="매우 그렇다"
+        />
+      </QuestionBlock>
+
+      <QuestionBlock label="질문 4 · 결정의 자율성">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          최종 결정을 얼마나 스스로 판단해서 내렸다고 느끼시나요?
+        </p>
+        <SliderScale
+          value={q1Post}
+          onChange={setQ1Post}
+          leftLabel="온전히 AI가 결정"
+          rightLabel="온전히 스스로 결정"
+        />
+      </QuestionBlock>
+
+      <QuestionBlock label="질문 5 · 기여도 분배">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          최종 결정에 본인과 AI는 각각 얼마나 기여했다고 생각하시나요?
+        </p>
+        <DualSlider valueAI={q2Post} onChange={setQ2Post} />
+      </QuestionBlock>
+
+      <QuestionBlock label="질문 6 · AI 외 영향">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          최종 결정은 추가적인 정보나 다른 사람의 조언 없이, AI와의 대화만으로
+          내려졌다.
+        </p>
+        <LikertScale
+          value={q3cPost}
+          onChange={setQ3cPost}
+          leftLabel="전혀 그렇지 않다"
+          rightLabel="매우 그렇다"
+        />
+      </QuestionBlock>
+
+      <NavButtons
+        onBack={onBack}
+        onNext={handleNext}
+        nextDisabled={!allFilled}
+      />
+    </div>
+  );
+}
+
+// ===== Page I: Reflection + demographics =====
+
+function PageI({ onNext, onBack, allAnswers }) {
+  const [reflection, setReflection] = useState("");
+  const [futureIntent, setFutureIntent] = useState("");
+  const [ageGroup, setAgeGroup] = useState(null);
+  const [gender, setGender] = useState(null);
+  const [contact, setContact] = useState("");
+
+  const allFilled = ageGroup !== null && gender !== null;
+
+  const handleNext = () => {
+    onNext({
+      reflection: reflection,
+      futureIntent: futureIntent,
+      ageGroup,
+      gender,
+      contactForGift: contact,
+    });
+  };
+
+  return (
+    <div className="bg-white rounded-3xl border border-stone-200 p-7 sm:p-9 lg:p-11 shadow-sm">
+      <p className="text-xs tracking-wider text-amber-700 font-medium uppercase mb-3">
+        마지막 질문입니다
+      </p>
+      <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold leading-snug mb-2">
+        마무리하며
+      </h2>
+      <p className="text-sm sm:text-base text-stone-500 mb-8 leading-relaxed">
+        거의 다 끝났습니다. 짧은 자유 응답과 인구통계 질문을 마지막으로
+        진행해주세요.
+      </p>
+
+      <QuestionBlock label="질문 1 · 자유 응답">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          대화를 다시 본 후, 처음 기억과 비교해 다른 점이나 새롭게 알게 된 점이
+          있다면 그 내용과 이유를 자유롭게 적어주세요.
+        </p>
+        <p className="text-xs text-stone-400 mt-2 mb-3">
+          없으셔도 괜찮습니다. 한 줄도 좋아요.
+        </p>
+        <textarea
+          value={reflection}
+          onChange={(e) => setReflection(e.target.value)}
+          placeholder=""
+          className="w-full min-h-[120px] px-4 py-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 placeholder:text-stone-400 focus:outline-none focus:border-indigo-500 transition-colors resize-y leading-relaxed"
+        />
+      </QuestionBlock>
+
+      <QuestionBlock label="질문 2 · 자유 응답">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          오늘 경험을 바탕으로, 앞으로 AI와 결정을 내리기 위한 대화를 할 때
+          본인의 사용 방식이 달라질 것 같은 부분이 있나요?
+        </p>
+        <p className="text-xs text-stone-400 mt-2 mb-3">
+          없거나 잘 모르겠다면 비워두셔도 괜찮습니다.
+        </p>
+        <textarea
+          value={futureIntent}
+          onChange={(e) => setFutureIntent(e.target.value)}
+          placeholder=""
+          className="w-full min-h-[120px] px-4 py-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 placeholder:text-stone-400 focus:outline-none focus:border-indigo-500 transition-colors resize-y leading-relaxed"
+        />
+      </QuestionBlock>
+
+      <QuestionBlock label="질문 3 · 연령대">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          연령대를 선택해주세요.
+        </p>
+        <div className="mt-4 grid grid-cols-2 gap-2">
+          {["20대", "30대", "40대", "50대 이상"].map((opt) => (
+            <button
+              key={opt}
+              onClick={() => setAgeGroup(opt)}
+              className={
+                "px-3 py-3 rounded-xl border text-sm transition-all " +
+                (ageGroup === opt
+                  ? "border-indigo-500 bg-indigo-50 text-indigo-900 font-medium"
+                  : "border-stone-200 bg-white text-stone-700 hover:border-stone-300")
+              }
+            >
+              {opt}
+            </button>
+          ))}
+        </div>
+      </QuestionBlock>
+
+      <QuestionBlock label="질문 4 · 성별">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          성별을 선택해주세요.
+        </p>
+        <div className="mt-4 grid grid-cols-3 gap-2">
+          {["여성", "남성", "기타·응답안함"].map((opt) => (
+            <button
+              key={opt}
+              onClick={() => setGender(opt)}
+              className={
+                "px-3 py-3 rounded-xl border text-sm transition-all " +
+                (gender === opt
+                  ? "border-indigo-500 bg-indigo-50 text-indigo-900 font-medium"
+                  : "border-stone-200 bg-white text-stone-700 hover:border-stone-300")
+              }
+            >
+              {opt}
+            </button>
+          ))}
+        </div>
+      </QuestionBlock>
+
+      <QuestionBlock label="질문 5 · 기프티콘 수령">
+        <p className="text-base sm:text-lg text-stone-800 leading-relaxed">
+          기프티콘을 받으실 휴대전화 번호를 입력해주세요.
+        </p>
+        <p className="text-xs text-stone-400 mt-2 mb-3">
+          기프티콘 발송 후 번호는 즉시 삭제됩니다.
+        </p>
+        <input
+          type="tel"
+          value={contact}
+          onChange={(e) => setContact(e.target.value)}
+          placeholder="010-1234-5678"
+          className="w-full px-4 py-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 placeholder:text-stone-400 focus:outline-none focus:border-indigo-500 transition-colors"
+        />
+      </QuestionBlock>
+
+      <NavButtons
+        onBack={onBack}
+        onNext={handleNext}
+        nextDisabled={!allFilled}
+        nextLabel="제출하고 마치기"
+      />
+    </div>
+  );
+}
+
+// ===== Complete page =====
+
+function CompletePage({ answers }) {
+  return (
+    <div className="bg-white rounded-3xl border border-stone-200 p-7 sm:p-9 lg:p-11 shadow-sm text-center">
+      <div className="w-20 h-20 rounded-full bg-emerald-50 flex items-center justify-center mx-auto mb-6">
+        <CheckCircle2 className="w-10 h-10 text-emerald-600" />
+      </div>
+      <h2 className="text-2xl sm:text-3xl font-semibold mb-4">
+        설문이 완료되었습니다
+      </h2>
+      <p className="text-stone-600 text-sm sm:text-base leading-relaxed mb-7">
+        끝까지 함께해주셔서 정말 감사합니다. 입력해주신 연락처로 기프티콘을
+        보내드릴 예정입니다.
+      </p>
+
+      <div className="bg-indigo-50 rounded-2xl p-5 text-left border border-indigo-100 mb-5">
+        <p className="text-sm text-indigo-900 leading-relaxed">
+          <strong className="font-medium">📋 연구 안내</strong>
+          <br />
+          <span className="text-indigo-700 text-sm">
+            본 연구는 사람들이 AI와의 대화에서 자신의 결정을 어떻게 회상하고
+            귀인하는지를 살펴보기 위한 연세대학교 정보대학원 학위 프로젝트
+            연구입니다. 수집된 익명 응답은 학술 목적으로만 사용된 뒤 안전하게
+            폐기됩니다.
+          </span>
+        </p>
+      </div>
+
+      <div className="bg-stone-50 rounded-2xl p-5 text-left border border-stone-100">
+        <div className="flex items-start gap-3">
+          <Share2 className="w-5 h-5 text-stone-500 flex-shrink-0 mt-0.5" />
+          <p className="text-sm text-stone-700 leading-relaxed">
+            주변에 ChatGPT, Claude, Gemini 등 AI를 자주 사용하는 분이 계시면
+            이 설문 링크를 공유해주시면 큰 도움이 됩니다. 감사합니다.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TerminatedPage() {
+  return (
+    <div className="bg-white rounded-3xl border border-stone-200 p-7 sm:p-9 lg:p-11 shadow-sm text-center">
+      <div className="text-5xl mb-5">🙏</div>
+      <h2 className="text-2xl font-semibold mb-3">참여해 주셔서 감사합니다</h2>
+      <p className="text-stone-600 text-sm sm:text-base leading-relaxed mb-7">
+        본 연구는 최근에 AI 챗봇으로 무언가를 결정해 보신 분들의 인식을 살펴보는
+        연구라, 조건이 다소 까다롭습니다. 죄송합니다.
+      </p>
+      <div className="bg-stone-50 rounded-2xl p-5 text-left border border-stone-100">
+        <div className="flex items-start gap-3">
+          <Share2 className="w-5 h-5 text-stone-500 flex-shrink-0 mt-0.5" />
+          <p className="text-sm text-stone-700 leading-relaxed">
+            혹시 주변에 ChatGPT나 Claude를 자주 사용하시는 분이 계시면 이
+            링크를 공유해 주시면 큰 도움이 됩니다. 감사합니다.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ===== Admin Page =====
+
+const CSV_COLUMNS = [
+  "participantId",
+  "submittedAt",
+  // Screening
+  "s1", "s2", "s3",
+  // Page A — usage + SoAS
+  "usageFreq",
+  "soas_1", "soas_2", "soas_3", "soas_4", "soas_5",
+  // Page C — own message recall
+  "decisionDescription",
+  "q4_promptRecall",
+  "q5_promptContentEstimate",
+  // Page D — AI first response recall
+  "aiFirstResponseRecall",
+  "q3a_priority",
+  "q3b_consistency",
+  "q5b_confirmationSeekingAwareness",
+  // Page E — final decision
+  "finalVsFirstResponse",
+  "q1_decisionAutonomy",
+  "q2_contributionAI",
+  "q3c_exclusivity",
+  // Page G — micro-coding
+  "pair1_user", "pair1_ai", "pair1_label",
+  "pair2_user", "pair2_ai", "pair2_label",
+  "overallRestateEstimate",
+  // Page H — post-reveal
+  "post_q5_promptContentEstimate",
+  "post_q3a_priority",
+  "post_q3b_consistency",
+  "post_q1_decisionAutonomy",
+  "post_q2_contributionAI",
+  "post_q3c_exclusivity",
+  // Page I — reflection + demographics
+  "reflection",
+  "futureIntent",
+  "ageGroup",
+  "gender",
+  "contactForGift",
+];
+
+function flattenResponse(r) {
+  const flat = { ...r };
+  // SoAS keys
+  if (r.soas) {
+    for (let i = 1; i <= 5; i++) flat[`soas_${i}`] = r.soas[i] ?? "";
+  }
+  // Micro-coding pairs
+  if (r.pair1) {
+    flat.pair1_user = r.pair1.user ?? "";
+    flat.pair1_ai = r.pair1.ai ?? "";
+    flat.pair1_label = r.pair1.label ?? "";
+  }
+  if (r.pair2) {
+    flat.pair2_user = r.pair2.user ?? "";
+    flat.pair2_ai = r.pair2.ai ?? "";
+    flat.pair2_label = r.pair2.label ?? "";
+  }
+  return flat;
+}
+
+function escapeCSV(val) {
+  if (val === null || val === undefined) return "";
+  const s = String(val);
+  if (s.includes(",") || s.includes('"') || s.includes("\n") || s.includes("\r")) {
+    return '"' + s.replace(/"/g, '""') + '"';
+  }
+  return s;
+}
+
+function responsesToCSV(responses) {
+  const header = CSV_COLUMNS.join(",");
+  const rows = responses.map((r) => {
+    const flat = flattenResponse(r);
+    return CSV_COLUMNS.map((col) => escapeCSV(flat[col])).join(",");
+  });
+  return [header, ...rows].join("\n");
+}
+
+function AdminPage() {
+  const [responses, setResponses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
+
+  const loadResponses = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const loaded = await loadResponsesFromSupabase();
+      // Sort by submission time descending (newest first)
+      loaded.sort((a, b) => {
+        const ta = new Date(a.submittedAt || 0).getTime();
+        const tb = new Date(b.submittedAt || 0).getTime();
+        return tb - ta;
+      });
+      setResponses(loaded);
+    } catch (e) {
+      setError(String(e));
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    loadResponses();
+  }, []);
+
+  const handleDownloadCSV = () => {
+    const csv = responsesToCSV(responses);
+    const bom = "\uFEFF"; // UTF-8 BOM for Excel Korean compatibility
+    const blob = new Blob([bom + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    const ts = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+    a.download = `research_responses_${ts}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const selected = responses.find((r) => r.participantId === selectedId);
+
+  return (
+    <div className="max-w-4xl mx-auto px-5 py-8 sm:py-12">
+      {/* Header */}
+      <div className="bg-white rounded-3xl border border-stone-200 p-7 sm:p-9 lg:p-11 shadow-sm mb-6">
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <p className="text-xs tracking-wider text-amber-600 font-medium uppercase mb-1">
+              연구자 전용
+            </p>
+            <h1 className="text-2xl sm:text-3xl font-semibold">응답 관리</h1>
+            <p className="text-sm text-stone-500 mt-2">
+              참여자 응답 확인 · CSV 다운로드 · 개별 응답 조회
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={loadResponses}
+              className="px-4 py-2 rounded-xl border border-stone-200 text-stone-600 hover:bg-stone-50 transition-colors flex items-center gap-2 text-sm font-medium"
+            >
+              <RefreshCw className="w-4 h-4" />
+              새로고침
+            </button>
+            <button
+              onClick={handleDownloadCSV}
+              disabled={responses.length === 0}
+              className={
+                "px-4 py-2 rounded-xl font-medium flex items-center gap-2 text-sm transition-colors " +
+                (responses.length > 0
+                  ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+                  : "bg-stone-100 text-stone-400 cursor-not-allowed")
+              }
+            >
+              <Download className="w-4 h-4" />
+              CSV 다운로드
+            </button>
+          </div>
+        </div>
+
+        {/* Stats */}
+        <div className="mt-6 grid grid-cols-3 gap-3">
+          <StatCard label="전체 응답" value={responses.length} />
+          <StatCard
+            label="오늘"
+            value={
+              responses.filter((r) => {
+                if (!r.submittedAt) return false;
+                const d = new Date(r.submittedAt);
+                const now = new Date();
+                return (
+                  d.getFullYear() === now.getFullYear() &&
+                  d.getMonth() === now.getMonth() &&
+                  d.getDate() === now.getDate()
+                );
+              }).length
+            }
+          />
+          <StatCard
+            label="최근 7일"
+            value={
+              responses.filter((r) => {
+                if (!r.submittedAt) return false;
+                const d = new Date(r.submittedAt).getTime();
+                return Date.now() - d < 7 * 24 * 60 * 60 * 1000;
+              }).length
+            }
+          />
+        </div>
+      </div>
+
+      {/* Response list */}
+      <div className="bg-white rounded-3xl border border-stone-200 p-7 sm:p-9 lg:p-11 shadow-sm">
+        <h2 className="text-lg font-semibold mb-4">응답 목록</h2>
+
+        {loading && (
+          <p className="text-sm text-stone-500 py-4">불러오는 중...</p>
+        )}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700">
+            오류: {error}
+          </div>
+        )}
+        {!loading && !error && responses.length === 0 && (
+          <p className="text-sm text-stone-500 py-8 text-center">
+            아직 응답이 없습니다.
+          </p>
+        )}
+
+        {!loading && responses.length > 0 && (
+          <div className="space-y-2">
+            {responses.map((r) => (
+              <ResponseRow
+                key={r.participantId}
+                response={r}
+                onClick={() => setSelectedId(r.participantId)}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Detail modal */}
+      {selected && (
+        <ResponseDetail
+          response={selected}
+          onClose={() => setSelectedId(null)}
+        />
+      )}
+    </div>
+  );
+}
+
+function StatCard({ label, value }) {
+  return (
+    <div className="bg-stone-50 border border-stone-100 rounded-2xl p-4">
+      <p className="text-xs text-stone-500 mb-1">{label}</p>
+      <p className="text-2xl font-semibold text-stone-800">{value}</p>
+    </div>
+  );
+}
+
+function ResponseRow({ response, onClick }) {
+  const r = response;
+  const submitted = r.submittedAt
+    ? new Date(r.submittedAt).toLocaleString("ko-KR", {
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : "?";
+  const decision = r.decisionDescription || "(미입력)";
+  const deltaPromptEst =
+    r.post_q5_promptContentEstimate !== undefined &&
+    r.q5_promptContentEstimate !== undefined
+      ? r.post_q5_promptContentEstimate - r.q5_promptContentEstimate
+      : null;
+  const deltaContributionAI =
+    r.post_q2_contributionAI !== undefined && r.q2_contributionAI !== undefined
+      ? r.post_q2_contributionAI - r.q2_contributionAI
+      : null;
+
+  return (
+    <button
+      onClick={onClick}
+      className="w-full text-left bg-stone-50 hover:bg-stone-100 border border-stone-200 rounded-2xl p-4 transition-colors"
+    >
+      <div className="flex items-center justify-between gap-3 mb-2 flex-wrap">
+        <div className="flex items-center gap-2">
+          <code className="text-xs font-mono text-stone-500">
+            {r.participantId}
+          </code>
+          <span className="text-xs text-stone-400">·</span>
+          <span className="text-xs text-stone-500">{submitted}</span>
+        </div>
+        <Eye className="w-4 h-4 text-stone-400" />
+      </div>
+      <p className="text-sm text-stone-800 mb-2 line-clamp-1">
+        {decision.length > 60 ? decision.substring(0, 60) + "..." : decision}
+      </p>
+      <div className="flex gap-2 flex-wrap">
+        {deltaPromptEst !== null && (
+          <Pill
+            label={`Δ프롬프트인식 ${deltaPromptEst > 0 ? "+" : ""}${deltaPromptEst}`}
+            color={
+              deltaPromptEst > 10
+                ? "amber"
+                : deltaPromptEst < -10
+                ? "blue"
+                : "stone"
+            }
+          />
+        )}
+        {deltaContributionAI !== null && (
+          <Pill
+            label={`ΔAI기여 ${deltaContributionAI > 0 ? "+" : ""}${deltaContributionAI}`}
+            color={
+              deltaContributionAI > 10
+                ? "amber"
+                : deltaContributionAI < -10
+                ? "blue"
+                : "stone"
+            }
+          />
+        )}
+        {r.pair1?.label && r.pair2?.label && (
+          <Pill
+            label={`${r.pair1.label}·${r.pair2.label}`}
+            color="indigo"
+          />
+        )}
+      </div>
+    </button>
+  );
+}
+
+function Pill({ label, color }) {
+  const colors = {
+    stone: "bg-stone-100 text-stone-600",
+    indigo: "bg-indigo-50 text-indigo-700",
+    amber: "bg-amber-50 text-amber-700",
+    blue: "bg-blue-50 text-blue-700",
+  };
+  return (
+    <span
+      className={
+        "inline-block text-xs px-2 py-1 rounded-md font-mono " +
+        (colors[color] || colors.stone)
+      }
+    >
+      {label}
+    </span>
+  );
+}
+
+function ResponseDetail({ response, onClose }) {
+  const r = response;
+  return (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "rgba(0,0,0,0.5)",
+        zIndex: 50,
+        overflowY: "auto",
+        padding: "1.5rem",
+      }}
+      onClick={onClose}
+    >
+      <div
+        className="max-w-2xl mx-auto bg-white rounded-3xl border border-stone-200 p-6 sm:p-8 shadow-lg"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <code className="text-sm font-mono text-stone-500">
+              {r.participantId}
+            </code>
+            <p className="text-xs text-stone-400 mt-1">
+              제출: {new Date(r.submittedAt).toLocaleString("ko-KR")}
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 rounded-full hover:bg-stone-100 flex items-center justify-center"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        <DetailSection title="스크리닝">
+          <DetailRow k="S1 (사용 경험)" v={r.s1} />
+          <DetailRow k="S2 (최근 시점)" v={r.s2} />
+          <DetailRow k="S3 (기록 접근)" v={r.s3} />
+        </DetailSection>
+
+        <DetailSection title="평소 AI 사용">
+          <DetailRow k="사용 빈도" v={r.usageFreq} />
+          {r.soas && (
+            <DetailRow
+              k="SoAS (5문항)"
+              v={[1, 2, 3, 4, 5]
+                .map((i) => r.soas[i] ?? "?")
+                .join(" / ")}
+            />
+          )}
+        </DetailSection>
+
+        <DetailSection title="결정 및 본인 메시지 (Pre-reveal)">
+          <DetailRow k="결정 내용" v={r.decisionDescription} long />
+          <DetailRow k="첫 메시지 회상" v={r.q4_promptRecall} long />
+          <DetailRow
+            k="Q5 정보 함량 (0-100)"
+            v={r.q5_promptContentEstimate}
+          />
+        </DetailSection>
+
+        <DetailSection title="AI 첫 응답 (Pre-reveal)">
+          <DetailRow k="AI 응답 회상" v={r.aiFirstResponseRecall} long />
+          <DetailRow k="Q3a 사전 방향성 (1-7)" v={r.q3a_priority} />
+          <DetailRow k="Q3b AI 응답 일치도 (1-7)" v={r.q3b_consistency} />
+          <DetailRow
+            k="Q5b 평소 사용 패턴 (1-7)"
+            v={r.q5b_confirmationSeekingAwareness}
+            note="1=확인용, 7=정보 얻기"
+          />
+        </DetailSection>
+
+        <DetailSection title="최종 결정 (Pre-reveal)">
+          <DetailRow k="첫응답 vs 최종" v={r.finalVsFirstResponse} />
+          <DetailRow k="Q1 자율성 (0-100)" v={r.q1_decisionAutonomy} />
+          <DetailRow
+            k="Q2 AI 기여 % (0-100)"
+            v={r.q2_contributionAI}
+          />
+          <DetailRow k="Q3c AI 외 영향 (1-7)" v={r.q3c_exclusivity} />
+        </DetailSection>
+
+        <DetailSection title="마이크로 코딩">
+          {r.pair1 && (
+            <>
+              <DetailRow k="페어 1 — 본인" v={r.pair1.user} long />
+              <DetailRow k="페어 1 — AI" v={r.pair1.ai} long />
+              <DetailRow k="페어 1 — 분류" v={r.pair1.label} />
+            </>
+          )}
+          {r.pair2 && (
+            <>
+              <DetailRow k="페어 2 — 본인" v={r.pair2.user} long />
+              <DetailRow k="페어 2 — AI" v={r.pair2.ai} long />
+              <DetailRow k="페어 2 — 분류" v={r.pair2.label} />
+            </>
+          )}
+          <DetailRow
+            k="전체 재진술 비중 (0-100)"
+            v={r.overallRestateEstimate}
+            note="0=새정보, 100=재진술"
+          />
+        </DetailSection>
+
+        <DetailSection title="Post-reveal 재측정">
+          <DetailRow
+            k="정보 함량 (Δ)"
+            v={`${r.q5_promptContentEstimate} → ${r.post_q5_promptContentEstimate}`}
+          />
+          <DetailRow
+            k="사전 방향성 (Δ)"
+            v={`${r.q3a_priority} → ${r.post_q3a_priority}`}
+          />
+          <DetailRow
+            k="AI 응답 일치도 (Δ)"
+            v={`${r.q3b_consistency} → ${r.post_q3b_consistency}`}
+          />
+          <DetailRow
+            k="결정 자율성 (Δ)"
+            v={`${r.q1_decisionAutonomy} → ${r.post_q1_decisionAutonomy}`}
+          />
+          <DetailRow
+            k="AI 기여 % (Δ)"
+            v={`${r.q2_contributionAI} → ${r.post_q2_contributionAI}`}
+          />
+          <DetailRow
+            k="AI 외 영향 (Δ)"
+            v={`${r.q3c_exclusivity} → ${r.post_q3c_exclusivity}`}
+          />
+        </DetailSection>
+
+        <DetailSection title="마무리">
+          <DetailRow k="자유 응답" v={r.reflection} long />
+          <DetailRow k="향후 사용 의도" v={r.futureIntent} long />
+          <DetailRow k="연령대" v={r.ageGroup} />
+          <DetailRow k="성별" v={r.gender} />
+          <DetailRow k="연락처" v={r.contactForGift} />
+        </DetailSection>
+      </div>
+    </div>
+  );
+}
+
+function DetailSection({ title, children }) {
+  return (
+    <div className="mb-5 last:mb-0">
+      <p className="text-xs tracking-wider text-stone-400 font-medium uppercase mb-2 pb-1 border-b border-stone-100">
+        {title}
+      </p>
+      <div className="space-y-1.5">{children}</div>
+    </div>
+  );
+}
+
+function DetailRow({ k, v, long, note }) {
+  if (v === undefined || v === null || v === "") {
+    return (
+      <div className="flex items-start gap-3 text-sm">
+        <span className="text-stone-500 flex-shrink-0 min-w-[140px]">{k}</span>
+        <span className="text-stone-300 italic">—</span>
+      </div>
+    );
+  }
+  if (long) {
+    return (
+      <div className="text-sm">
+        <p className="text-stone-500 mb-1">{k}</p>
+        <p className="text-stone-800 leading-relaxed bg-stone-50 rounded-lg p-2.5 whitespace-pre-wrap">
+          {v}
+        </p>
+      </div>
+    );
+  }
+  return (
+    <div className="flex items-start gap-3 text-sm">
+      <span className="text-stone-500 flex-shrink-0 min-w-[140px]">{k}</span>
+      <span className="text-stone-800 font-medium">{String(v)}</span>
+      {note && (
+        <span className="text-xs text-stone-400 italic">{note}</span>
+      )}
+    </div>
+  );
+}
+
+
+// ===== 앱 렌더링 =====
+const rootEl = document.getElementById("root");
+ReactDOM.createRoot(rootEl).render(React.createElement(ResearchApp));
+  </script>
 </body>
 </html>
